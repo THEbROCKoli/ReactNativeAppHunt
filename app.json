@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "AppHunt2",
+    "slug": "AppHunt2",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {"softwareKeyboardLayoutMode": "pan"},
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

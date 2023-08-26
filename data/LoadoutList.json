@@ -1,0 +1,16 @@
+{
+    "mockUserLoadouts":[
+        {
+            "ID":0,
+            "loadoutName":"First Loadout",
+            "firstWeaponID":0,
+            "secondWeaponID":0 
+        },
+        {
+            "ID":0,
+            "loadoutName":"Second Loadout",
+            "firstWeaponID":0,
+            "secondWeaponID":0 
+        }
+    ]
+}
