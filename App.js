@@ -8,7 +8,7 @@ import WeaponList from './src/screens/WeaponsList';
 import WeaponDetails from './src/screens/WeaponDetails';
 import LoadoutList from './src/screens/LoadoutList';
 //import WeaponDetails from './src/screens/WeaponDetails';
-//aaa
+//aaaaa
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
