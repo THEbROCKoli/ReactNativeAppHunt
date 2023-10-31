@@ -56,6 +56,7 @@ return (
       tabBarStyle:{backgroundColor:"#858585"}}}>
       <Tab.Screen name="Weapon Analyzer" component={WeaponAnalyzerStack} options={{headerShown:false, 
       tabBarIcon: ({ focused, color }) => (
+        // metti navigator.goback
         <Image
           source={focused ? require('./assets/weaponAnalyzerFocused.png') : require('./assets/weaponAnalyzer.png')}
           style={{ tintColor: color, width: 60, height: 30 }}
