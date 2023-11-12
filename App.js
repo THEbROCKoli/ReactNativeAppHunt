@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useCallback, useState } from "react";
-import { Image, Pressable, Text } from "react-native";
+import { StyleSheet,Image, Pressable, Text, View } from "react-native";
 import {
   NavigationContainer,
   StackActions,
@@ -12,13 +12,15 @@ import LoadoutBuilder from "./src/screens/LoadoutBuilder";
 import WeaponList from "./src/screens/WeaponsList";
 import WeaponDetails from "./src/screens/WeaponDetails";
 import LoadoutList from "./src/screens/LoadoutList";
+import { SafeAreaView } from "react-native-safe-area-context";
 //import WeaponDetails from './src/screens/WeaponDetails';
 //aaaaa
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-const nav = useNavigation();
-const App = ({ navigation }) => {
+//const nav = useNavigation();
+/*
+const App = () => {
   function printLallo() {
     console.log("lallo");
     StackActions.popToTop;
@@ -76,6 +78,7 @@ const App = ({ navigation }) => {
     </Stack.Navigator>
   );
 
+  /////////////////////////////////////////////////////
   /*return (
     <NavigationContainer>
       <Tab.Navigator
@@ -123,6 +126,8 @@ const App = ({ navigation }) => {
       </Tab.Navigator>
     </NavigationContainer>
   );*/
+//////////////////////////////////////////////////////////////////
+/*
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -153,6 +158,8 @@ const App = ({ navigation }) => {
               </Pressable>
             ),
             headerShown: false,
+
+            ///////////////////////////////////////////
             /*tabBarIcon: ({ focused, color }) => (
               // metti navigator.goback
 
@@ -165,6 +172,8 @@ const App = ({ navigation }) => {
                 style={{ tintColor: color, width: 60, height: 30 }}
               />
             ),*/
+            /////////////////////////////////////////////
+/*
           }}
         />
         <Tab.Screen
@@ -187,6 +196,7 @@ const App = ({ navigation }) => {
               </Pressable>
             ),
             headerShown: false,
+            ////////////////////////////////////////////
             /*tabBarIcon: ({ focused, color }) => (
               <Image
                 source={
@@ -197,6 +207,9 @@ const App = ({ navigation }) => {
                 style={{ tintColor: color, width: 30, height: 30 }}
               />
             ),*/
+
+            /////////////////////////////////////////////
+         /* 
           }}
         />
       </Tab.Navigator>
@@ -204,4 +217,57 @@ const App = ({ navigation }) => {
   );
 };
 
-export default App;
+export default App;*/
+const weaponStack = (
+  <Stack.Navigator>
+  <Stack.Screen name="WeaponList" component={WeaponList}>
+   
+  </Stack.Screen>
+  <Stack.Screen name="WeaponDetails" component={WeaponDetails}>
+   
+  </Stack.Screen>
+  </Stack.Navigator>)
+
+export default class App extends React.Component{
+
+  state ={
+    shownScreen: 
+    <NavigationContainer >
+      {weaponStack}
+    </NavigationContainer>
+  }
+
+ 
+  render(){
+    return(
+      <SafeAreaView style={{flex:1}}>
+        <View style ={{flex:1}}>
+          {this.state.shownScreen}
+        </View>
+        
+        <View style={styles.tabBar}>
+        <Pressable onPress={() =>{
+          console.log("lollo")
+        }}
+        style={{flex:1}}>
+          
+          </Pressable>
+          <Pressable style={{flex:1}}>
+          
+          </Pressable>
+        </View>
+      </SafeAreaView>
+      
+    );
+
+  }
+
+}
+
+const styles = StyleSheet.create({
+  tabBar:{
+    height: 60,
+    backgroundColor: "#868686"
+  }
+})
+

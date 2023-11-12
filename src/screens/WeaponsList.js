@@ -3,10 +3,11 @@ import { StyleSheet, Text, View , FlatList, TextInput, SafeAreaView, Image, Touc
 import AmmoSelector from '../components/AmmoSelector'
 import WeaponSizeSelector from '../components/WeaponSizeSelector';
 import ListItem from '../components/ListItem';
+import { useNavigation } from '@react-navigation/native';
 
-const WeaponList = ({navigation}) => {
+const WeaponList = () => {
 
-
+  const navigation = useNavigation()
   const [list, setList] = useState([]);
   let jsonData = require('../../data/HuntJsonLight.json')
   let regexBuildArray=[]
