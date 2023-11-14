@@ -1,11 +1,7 @@
 import * as React from "react";
 import { useEffect, useCallback, useState } from "react";
-import { StyleSheet,Image, Pressable, Text, View } from "react-native";
-import {
-  NavigationContainer,
-  StackActions,
-  useNavigation,
-} from "@react-navigation/native";
+import { StyleSheet, Image, Pressable, Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LoadoutBuilder from "./src/screens/LoadoutBuilder";
@@ -172,7 +168,7 @@ const App = () => {
                 style={{ tintColor: color, width: 60, height: 30 }}
               />
             ),*/
-            /////////////////////////////////////////////
+/////////////////////////////////////////////
 /*
           }}
         />
@@ -208,8 +204,8 @@ const App = () => {
               />
             ),*/
 
-            /////////////////////////////////////////////
-         /* 
+/////////////////////////////////////////////
+/* 
           }}
         />
       </Tab.Navigator>
@@ -218,56 +214,140 @@ const App = () => {
 };
 
 export default App;*/
+
 const weaponStack = (
   <Stack.Navigator>
-  <Stack.Screen name="WeaponList" component={WeaponList}>
-   
-  </Stack.Screen>
-  <Stack.Screen name="WeaponDetails" component={WeaponDetails}>
-   
-  </Stack.Screen>
-  </Stack.Navigator>)
+    <Stack.Screen
+      name="LoadoutList"
+      component={WeaponList}
+      options={{
+        headerShown: false,
+      }}
+    ></Stack.Screen>
+    <Stack.Screen
+      name="WeaponDetails"
+      component={WeaponDetails}
+      options={{
+        headerTintColor: "#FFFFFF",
+        headerStyle: {
+          backgroundColor: "#000000",
+        },
+      }}
+    ></Stack.Screen>
+  </Stack.Navigator>
+);
+const loadoutStack = (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="LoadoutList"
+      component={LoadoutList}
+      options={{
+        headerShown: false,
+      }}
+    ></Stack.Screen>
+    <Stack.Screen
+      name="LoadoutBuilder"
+      component={LoadoutBuilder}
+    ></Stack.Screen>
+  </Stack.Navigator>
+);
 
-export default class App extends React.Component{
+export default class App extends React.Component {
+  state = {
+    shownScreen: <NavigationContainer>{weaponStack}</NavigationContainer>,
+    weaponListFocus: true,
+    loadoutFocus: false,
+    hideTabBar: false,
+  };
+  changeScreen = (screen) => {
+    this.setState({
+      shownScreen: screen,
+    });
+  };
 
-  state ={
-    shownScreen: 
-    <NavigationContainer >
-      {weaponStack}
-    </NavigationContainer>
-  }
+  changeWeaponListFocus = () => {
+    this.setState({
+      weaponListFocus: true,
+      loadoutFocus: false,
+    });
+  };
 
- 
-  render(){
-    return(
-      <SafeAreaView style={{flex:1}}>
-        <View style ={{flex:1}}>
-          {this.state.shownScreen}
-        </View>
-        
-        <View style={styles.tabBar}>
-        <Pressable onPress={() =>{
-          console.log("lollo")
-        }}
-        style={{flex:1}}>
-          
+  changeLoadoutFocus = () => {
+    this.setState({
+      loadoutFocus: true,
+      weaponListFocus: false,
+    });
+  };
+  letsHideTabBar = () => {
+    this.setState({
+      hideTabBar: true,
+    });
+  };
+
+  render() {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#858585" }}>
+        <View style={{ flex: 1 }}>{this.state.shownScreen}</View>
+        <View
+          style={
+            !this.state.hideTabBar
+              ? styles.tabBar
+              : { ...styles.tabBar, display: "none" }
+          }
+        >
+          <Pressable
+            onPress={() => {
+              this.changeWeaponListFocus();
+              this.changeScreen(
+                <NavigationContainer>{weaponStack}</NavigationContainer>
+              );
+            }}
+            style={styles.tabItem}
+          >
+            <Image
+              source={require("./assets/weaponAnalyzer.png")}
+              style={{
+                width: 60,
+                height: 30,
+                tintColor: this.state.weaponListFocus ? "#D9D9D9" : "#393939",
+              }}
+            />
           </Pressable>
-          <Pressable style={{flex:1}}>
-          
+          <Pressable
+            style={styles.tabItem}
+            onPress={() => {
+              //this.letsHideTabBar();
+              this.changeLoadoutFocus();
+              this.changeScreen(
+                <NavigationContainer>{loadoutStack}</NavigationContainer>
+              );
+            }}
+          >
+            <Image
+              source={require("./assets/loadoutBuilder.png")}
+              style={{
+                width: 50,
+                height: 60,
+                tintColor: this.state.loadoutFocus ? "#D9D9D9" : "#393939",
+              }}
+            />
           </Pressable>
         </View>
       </SafeAreaView>
-      
     );
-
   }
-
 }
 
 const styles = StyleSheet.create({
-  tabBar:{
+  tabBar: {
+    flexDirection: "row",
     height: 60,
-    backgroundColor: "#868686"
-  }
-})
-
+    backgroundColor: "#868686",
+    marginBottom: 20,
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

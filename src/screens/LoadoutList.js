@@ -86,7 +86,23 @@ const LoadoutList = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.flatListContainer}>
-        <View style={{ flex: 0.03 }} />
+        <View style={{ flex: 0.003 }} />
+        <View style={{ flexDirection: "row" }}>
+          <Image
+            style={{ width: 80, height: 60 }}
+            source={require("../../assets/loadoutList.png")}
+            resizeMode="contain"
+          />
+          <Text
+            style={{
+              fontSize: 20,
+              color: "#FFFFFF",
+              alignSelf: "center",
+            }}
+          >
+            Your saved loadouts
+          </Text>
+        </View>
         <FlatList
           windowSize={10}
           style={styles.flatList}
@@ -95,7 +111,7 @@ const LoadoutList = ({ navigation }) => {
         />
         <View style={{ flex: 0.03 }} />
       </View>
-      <View style={{ flex: 2 }}>
+      <View style={{ flex: 2, backgroundColor: "#363636" }}>
         <TouchableOpacity
           onPress={createNewLoadout}
           style={styles.newLoadoutButton}
@@ -134,8 +150,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 80,
     backgroundColor: "#85858500",
-    borderBottomWidth: 2,
-    borderStyle: "dashed",
   },
   flatListItemText: {
     textAlignVertical: "center",
@@ -146,7 +160,6 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-    backgroundColor: "#393939",
   },
   imageContainer: {
     width: 50,
@@ -164,8 +177,8 @@ const styles = StyleSheet.create({
   },
   flatListContainer: {
     flex: 15,
-    flexDirection: "row",
-    marginBottom: 10,
+    flexDirection: "column",
+    backgroundColor: "#363636",
   },
   container: {
     flex: 1,
