@@ -11,8 +11,10 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Base from "../../data/Base";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 //const db = openDatabase({name: 'my.db', location: 'default'}, successcb, errorcb);
 const LoadoutList = ({ navigation }) => {
+  //const isFocused = useFocusEffect()
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const loadoutName = "New loadout";
@@ -47,6 +49,13 @@ const LoadoutList = ({ navigation }) => {
     );
   }
 
+  /*if(isFocused){
+    Base.getLoadouts((loadouts) => {
+      console.log("ripopolo la lista perché siamo focused")
+      setList(loadouts);
+    });
+  }*/
+
   const thisUserLoadouts = list;
   const renderItem = ({ item }) => {
     return (
@@ -54,7 +63,9 @@ const LoadoutList = ({ navigation }) => {
         <TouchableOpacity
           style={{ flex: 1 }}
           onPress={() => {
-            return navigation.navigate("LoadoutBuilder", { id: item.id });
+            return navigation.navigate("LoadoutBuilder", {
+              id: item.id,
+            });
           }}
         >
           <View style={{ flex: 1 }}>

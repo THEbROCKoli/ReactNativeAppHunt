@@ -33,7 +33,7 @@ const AmmoSelector = ({onDataReceived, ammoIcon, ammoType, imageSize}) => {
           <View style={{...styles.ammoContainer, backgroundColor: ammoBackColor, borderColor: ammoColor}}>
             <View style={{...styles.ammoSubContainer, width:imageSize, height:imageSize,}}>
               <Image style={{...styles.ammoIcon, tintColor: ammoColor}} source={ ammoIcon }
-              resizeMode='contain'/>
+              resizeMode='contain'/>  
             </View>
           </View>
         </TouchableWithoutFeedback>

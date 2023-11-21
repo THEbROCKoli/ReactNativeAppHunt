@@ -7,27 +7,34 @@ import {
   View,
   ScrollView,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import StandardDetailField from "../components/StandardDetailField";
 import AmmoDetailField from "../components/AmmoDetailField";
 import WeaponDamageDetail from "../components/WeaponDamageDetail";
 import CyclingTimeDetailField from "../components/CyclingTimeDetailField";
 import ShotgunBowDamageDetail from "../components/ShotgunBowDamageDetail";
+import { getDamageModifiers, getWeaponList } from "../apiCalls/weaponApis";
 
 const WeaponDetails = ({ route }) => {
   const [list, setList] = useState([]);
   const [damageModifiers, setDamageModifiers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  let jsonData = require("../../data/HuntJson.json");
   const damageModifiersData = require("../../data/HuntDamageModifiers.json");
   useEffect(() => {
-    setList(jsonData);
+    getWeaponList().then((response) => {
+      setList(response);
+      getDamageModifiers().then((response) => {
+        setDamageModifiers(response);
+        setIsLoading(false);
+      });
+    });
     setDamageModifiers(damageModifiersData);
-    setIsLoading(false);
   }, []);
 
   if (isLoading) {
     // Mostra un indicatore di caricamento o uno stato di "dati in attesa" fino a quando list non è pronto
+    console.log("im loading");
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#fff" />
@@ -36,16 +43,29 @@ const WeaponDetails = ({ route }) => {
   }
 
   const { id, name } = route.params;
+
   let weapon;
   let weaponName;
   let weaponAmmoType;
-
   weapon = list[id - 1];
+
   weaponName = weapon ? weapon.name : "nd";
+
   weaponAmmoType = weapon ? weapon.ammo : "nd";
-  if (weaponAmmoType == null) {
+  console.log(weaponAmmoType);
+
+  /*return(
+
+      <SafeAreaView style={{flex:1}}>
+        <View style={{flex:1}}>
+          <Text>{weaponAmmoType}</Text>
+        </View>
+      </SafeAreaView>
+    )*/
+  if (weaponAmmoType == "melee") {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#393939" }}>
+        <Image style={styles.weaponImage} source={{ uri: weapon.image }} />
         <View style={styles.infoPart}>
           <StandardDetailField
             content={weapon.stats.melee_damage.toString()}
@@ -61,13 +81,14 @@ const WeaponDetails = ({ route }) => {
         </View>
       </SafeAreaView>
     );
-  } else if (weaponName.includes("bow") || weaponAmmoType.startsWith("shot")) {
+  } else if (weaponAmmoType.startsWith("shot")) {
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView>
+          <Image style={styles.weaponImage} source={{ uri: weapon.image }} />
           <View style={styles.infoPart}>
             <StandardDetailField
-              content={weapon.ammo}
+              content={weaponAmmoType}
               icon={require("../../assets/genericAmmo.png")}
               label={"Ammo type"}
             ></StandardDetailField>
@@ -156,6 +177,7 @@ const WeaponDetails = ({ route }) => {
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView>
+          <Image style={styles.weaponImage} source={{ uri: weapon.image }} />
           <View style={styles.infoPart}>
             <StandardDetailField
               content={weapon.ammo}
@@ -265,5 +287,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginHorizontal: 5,
     marginVertical: 5,
+  },
+  weaponImage: {
+    marginTop: 10,
+    width: 384,
+    height: 150,
+    alignSelf: "center",
+    borderRadius: 10,
+    borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
   },
 });

@@ -14,12 +14,10 @@ const WeaponDamageDetail = ({icon,  content, ammoType, damageModifiers}) =>{
     const torsoDamageOverDistanceArray = []
     const headShotMultiplier = damageModifiers.hitZone.head[ammoType]
     const headDamageOverDistanceArray = []
-
     const dod = damageModifiers.damageOverDistance[ammoType]
-    distanceArray.forEach(element => {
-        torsoDamageOverDistanceArray.push(parseInt(dod[element+'m']*content))                
-    });
-    
+    dod.forEach(element =>{
+        torsoDamageOverDistanceArray.push(parseInt(element*content))
+    })
     torsoDamageOverDistanceArray.forEach(element => {
         if (ammoType.includes("bow")) {
             headDamageOverDistanceArray.push(150)

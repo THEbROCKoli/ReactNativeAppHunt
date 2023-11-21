@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import { StyleSheet, Image, Pressable, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -10,7 +10,6 @@ import WeaponDetails from "./src/screens/WeaponDetails";
 import LoadoutList from "./src/screens/LoadoutList";
 import { SafeAreaView } from "react-native-safe-area-context";
 //import WeaponDetails from './src/screens/WeaponDetails';
-//aaaaa
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -227,12 +226,13 @@ const weaponStack = (
     <Stack.Screen
       name="WeaponDetails"
       component={WeaponDetails}
-      options={{
-        headerTintColor: "#FFFFFF",
+      options={({ route }) => ({
+        title: route.params.name,
+        headerTintColor: "#FFF",
         headerStyle: {
-          backgroundColor: "#000000",
+          backgroundColor: "#242424",
         },
-      }}
+      })}
     ></Stack.Screen>
   </Stack.Navigator>
 );
@@ -248,6 +248,12 @@ const loadoutStack = (
     <Stack.Screen
       name="LoadoutBuilder"
       component={LoadoutBuilder}
+      options={{
+        headerTintColor: "#FFF",
+        headerStyle: {
+          backgroundColor: "#242424",
+        },
+      }}
     ></Stack.Screen>
   </Stack.Navigator>
 );
@@ -257,13 +263,19 @@ export default class App extends React.Component {
     shownScreen: <NavigationContainer>{weaponStack}</NavigationContainer>,
     weaponListFocus: true,
     loadoutFocus: false,
-    hideTabBar: false,
+    hiddenTabBar: false,
   };
   changeScreen = (screen) => {
     this.setState({
       shownScreen: screen,
     });
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.shownScreen !== prevState.shownScreen) {
+      console.log("Cambio screen");
+    }
+  }
 
   changeWeaponListFocus = () => {
     this.setState({
@@ -278,19 +290,18 @@ export default class App extends React.Component {
       weaponListFocus: false,
     });
   };
-  letsHideTabBar = () => {
+  hideTabBar = () => {
     this.setState({
-      hideTabBar: true,
+      hiddenTabBar: true,
     });
   };
-
   render() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#858585" }}>
         <View style={{ flex: 1 }}>{this.state.shownScreen}</View>
         <View
           style={
-            !this.state.hideTabBar
+            !this.state.hiddenTabBar
               ? styles.tabBar
               : { ...styles.tabBar, display: "none" }
           }
@@ -307,16 +318,17 @@ export default class App extends React.Component {
             <Image
               source={require("./assets/weaponAnalyzer.png")}
               style={{
-                width: 60,
-                height: 30,
+                
+                resizeMode: "contain",
                 tintColor: this.state.weaponListFocus ? "#D9D9D9" : "#393939",
+                height: 50,
               }}
             />
           </Pressable>
           <Pressable
             style={styles.tabItem}
             onPress={() => {
-              //this.letsHideTabBar();
+              //this.hideTabBar();
               this.changeLoadoutFocus();
               this.changeScreen(
                 <NavigationContainer>{loadoutStack}</NavigationContainer>
@@ -325,9 +337,11 @@ export default class App extends React.Component {
           >
             <Image
               source={require("./assets/loadoutBuilder.png")}
+              resizeMode="contain"
               style={{
-                width: 50,
-                height: 60,
+                height: 50,
+                
+                resizeMode: "contain",
                 tintColor: this.state.loadoutFocus ? "#D9D9D9" : "#393939",
               }}
             />
@@ -343,7 +357,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 60,
     backgroundColor: "#868686",
-    marginBottom: 20,
+    
   },
   tabItem: {
     flex: 1,

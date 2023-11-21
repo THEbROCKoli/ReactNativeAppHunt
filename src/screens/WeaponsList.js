@@ -13,11 +13,12 @@ import AmmoSelector from "../components/AmmoSelector";
 import WeaponSizeSelector from "../components/WeaponSizeSelector";
 import ListItem from "../components/ListItem";
 import { useNavigation } from "@react-navigation/native";
+import { getWeaponList } from "../apiCalls/weaponApis";
 
 const WeaponList = () => {
   const navigation = useNavigation();
   const [list, setList] = useState([]);
-  let jsonData = require("../../data/HuntJsonLight.json");
+  //let jsonData = require("../../data/HuntJsonLight.json");
   let regexBuildArray = [];
   const [inputText, setInputText] = useState("");
   const [search, setSearch] = useState("");
@@ -26,7 +27,8 @@ const WeaponList = () => {
     setInputText(text);
   };
   useEffect(() => {
-    setList(jsonData);
+    //setList(jsonData);
+    getWeaponList().then(response => setList(response));
   }, []);
   const onPressSearch = () => {
     setSearch(inputText);
@@ -65,8 +67,8 @@ const WeaponList = () => {
   }
   let listFiltered;
   listFiltered = useMemo(() => {
-    let filteringList = list.filter((l) =>
-      l.name.toLowerCase().includes(search.toLowerCase())
+    let filteringList = list.filter((item) =>
+      item.name.toLowerCase().includes(search.toLowerCase())
     );
 
     switch (weaponSizeSelected) {
@@ -219,6 +221,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     backgroundColor: "#858585",
     flex: 1,
+    paddingVertical:10
   },
   flatListContainer: {
     flex: 15,
