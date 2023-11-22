@@ -14,7 +14,6 @@ import Base from "../../data/Base";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 //const db = openDatabase({name: 'my.db', location: 'default'}, successcb, errorcb);
 const LoadoutList = ({ navigation }) => {
-  //const isFocused = useFocusEffect()
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const loadoutName = "New loadout";
@@ -25,6 +24,12 @@ const LoadoutList = ({ navigation }) => {
       setList(loadouts);
     });
   }, []);
+
+  const refresh = () => {
+    Base.getLoadouts((loadouts) => {
+      setList(loadouts);
+    });
+  };
 
   const createNewLoadout = () => {
     Base.newLoadout();
@@ -41,20 +46,12 @@ const LoadoutList = ({ navigation }) => {
   };
 
   if (isLoading) {
-    // Mostra un indicatore di caricamento o uno stato di "dati in attesa" fino a quando list non è pronto
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#fff" />
       </View>
     );
   }
-
-  /*if(isFocused){
-    Base.getLoadouts((loadouts) => {
-      console.log("ripopolo la lista perché siamo focused")
-      setList(loadouts);
-    });
-  }*/
 
   const thisUserLoadouts = list;
   const renderItem = ({ item }) => {
@@ -65,10 +62,18 @@ const LoadoutList = ({ navigation }) => {
           onPress={() => {
             return navigation.navigate("LoadoutBuilder", {
               id: item.id,
+              onGoBack: () => {
+                refresh();
+              },
             });
           }}
         >
-          <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+            }}
+          >
             <Text style={styles.flatListItemText}>{item.loadoutName}</Text>
           </View>
         </TouchableOpacity>
@@ -161,14 +166,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 80,
     backgroundColor: "#85858500",
+    alignContent: "center",
   },
-  flatListItemText: {
-    textAlignVertical: "center",
-    flex: 1,
-    fontSize: 20,
-    color: "#FFFFFF",
-    paddingHorizontal: 10,
-  },
+  flatListItemText: { fontSize: 20, color: "white", paddingHorizontal: 10 },
   safeArea: {
     flex: 1,
   },
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     alignSelf: "center",
-    justifyContent: "center",
+
     alignItems: "center",
     overflow: "hidden",
     marginEnd: 5,

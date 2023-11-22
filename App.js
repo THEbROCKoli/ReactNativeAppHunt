@@ -1,6 +1,13 @@
 import * as React from "react";
 import { useEffect, useCallback, useMemo } from "react";
-import { StyleSheet, Image, Pressable, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  Pressable,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -121,7 +128,7 @@ const App = () => {
       </Tab.Navigator>
     </NavigationContainer>
   );*/
-//////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////
 /*
   return (
     <NavigationContainer>
@@ -259,14 +266,17 @@ const loadoutStack = (
 );
 
 export default class App extends React.Component {
+  //const [s, setS] = useState({})
   state = {
     shownScreen: <NavigationContainer>{weaponStack}</NavigationContainer>,
     weaponListFocus: true,
     loadoutFocus: false,
     hiddenTabBar: false,
+    isHidden: false,
   };
   changeScreen = (screen) => {
     this.setState({
+      // ...s,
       shownScreen: screen,
     });
   };
@@ -290,6 +300,7 @@ export default class App extends React.Component {
       weaponListFocus: false,
     });
   };
+
   hideTabBar = () => {
     this.setState({
       hiddenTabBar: true,
@@ -318,7 +329,6 @@ export default class App extends React.Component {
             <Image
               source={require("./assets/weaponAnalyzer.png")}
               style={{
-                
                 resizeMode: "contain",
                 tintColor: this.state.weaponListFocus ? "#D9D9D9" : "#393939",
                 height: 50,
@@ -340,7 +350,7 @@ export default class App extends React.Component {
               resizeMode="contain"
               style={{
                 height: 50,
-                
+
                 resizeMode: "contain",
                 tintColor: this.state.loadoutFocus ? "#D9D9D9" : "#393939",
               }}
@@ -357,7 +367,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 60,
     backgroundColor: "#868686",
-    
   },
   tabItem: {
     flex: 1,

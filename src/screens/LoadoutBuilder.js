@@ -25,7 +25,7 @@ const LoadoutBuilder = ({ route, navigation }) => {
   const [firstWeaponId, setFirstWeaponId] = useState(-1);
   const [secondWeaponId, setSecondWeaponId] = useState(-1);
 
-  const { id, name } = route.params;
+  const { id, name, onGoBack } = route.params;
   useEffect(() => {
     getWeaponList().then((response) => {
       setList(response);
@@ -178,6 +178,8 @@ const LoadoutBuilder = ({ route, navigation }) => {
         <TouchableOpacity
           onPress={() => {
             updateLoadout(loadoutName, firstWeaponId, secondWeaponId, id);
+            route.params.onGoBack();
+            //navigation.options.onGoBack();
             navigation.goBack();
           }}
         >
