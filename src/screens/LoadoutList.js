@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,10 +13,17 @@ import {
 import Base from "../../data/Base";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 //const db = openDatabase({name: 'my.db', location: 'default'}, successcb, errorcb);
-const LoadoutList = ({ navigation }) => {
+const LoadoutList = ({ route, navigation }) => {
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const loadoutName = "New loadout";
+  const maybeRefresh = route.params;
+
+  
+  const maybeRefreshRef = useRef(maybeRefresh);
+
+  useEffect(() => {
+    maybeRefreshRef.current = maybeRefresh;
+  }, [maybeRefresh]);
 
   useEffect(() => {
     Base.createLoadoutTable();
@@ -52,6 +59,12 @@ const LoadoutList = ({ navigation }) => {
       </View>
     );
   }
+  useEffect(() => {
+    if (maybeRefreshRef.current != null && maybeRefreshRef.current) {
+      console.log("refreshing");
+      refresh();
+    }
+  }, [route]);
 
   const thisUserLoadouts = list;
   const renderItem = ({ item }) => {
@@ -62,10 +75,17 @@ const LoadoutList = ({ navigation }) => {
           onPress={() => {
             return navigation.navigate("LoadoutBuilder", {
               id: item.id,
+              /*onGoBack: () => {
+                refresh();
+              },*/
+            });
+
+            /*return navigation.navigate( "LoadoutBuilder", {
+              id: item.id,
               onGoBack: () => {
                 refresh();
               },
-            });
+            });*/
           }}
         >
           <View

@@ -28,7 +28,7 @@ const WeaponList = () => {
   };
   useEffect(() => {
     //setList(jsonData);
-    getWeaponList().then(response => setList(response));
+    getWeaponList().then((response) => setList(response));
   }, []);
   const onPressSearch = () => {
     setSearch(inputText);
@@ -145,7 +145,7 @@ const WeaponList = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.safeArea}>
         <View style={{ flex: 1.5, justifyContent: "center" }}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View style={styles.inputContainer}>
             <TextInput
               placeholder="search"
               style={styles.textInput}
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     backgroundColor: "#858585",
     flex: 1,
-    paddingVertical:10
+    paddingVertical: 10,
   },
   flatListContainer: {
     flex: 15,
@@ -234,12 +234,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     marginBottom: 12,
   },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#858585",
+    marginHorizontal: 10,
+    borderRadius: 20,
+  },
   textInput: {
     flex: 1,
     color: "#FFFFFF",
-    backgroundColor: "#858585",
+    fontSize: 20,
     paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     borderRadius: 20,
     marginHorizontal: 10,
   },
@@ -256,6 +263,7 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
   },
   searchImage: {
+    resizeMode: "contain",
     width: 40,
     height: 40,
     alignSelf: "center",

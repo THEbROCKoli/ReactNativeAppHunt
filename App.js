@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useCallback, useMemo } from "react";
+import { useEffect, useCallback, useMemo, useState } from "react";
 import {
   StyleSheet,
   Image,
@@ -265,112 +265,97 @@ const loadoutStack = (
   </Stack.Navigator>
 );
 
-export default class App extends React.Component {
-  //const [s, setS] = useState({})
-  state = {
-    shownScreen: <NavigationContainer>{weaponStack}</NavigationContainer>,
-    weaponListFocus: true,
-    loadoutFocus: false,
-    hiddenTabBar: false,
-    isHidden: false,
-  };
-  changeScreen = (screen) => {
-    this.setState({
-      // ...s,
-      shownScreen: screen,
-    });
+
+export default App = () => {
+  const [shownScreen, setShownScreen] = useState(
+    <NavigationContainer>{weaponStack}</NavigationContainer>
+  );
+  const [weaponListFocus, setWeaponListFocus] = useState(true);
+  const [loadoutFocus, setLoadoutFocus] = useState(false);
+  const [hiddenTabBar, setHiddenTabBar] = useState(false);
+
+  const changeScreen = (screen) => {
+    setShownScreen(screen);
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.shownScreen !== prevState.shownScreen) {
-      console.log("Cambio screen");
-    }
-  }
-
-  changeWeaponListFocus = () => {
-    this.setState({
-      weaponListFocus: true,
-      loadoutFocus: false,
-    });
+  const changeWeaponListFocus = () => {
+    setWeaponListFocus(true);
+    setLoadoutFocus(false);
   };
 
-  changeLoadoutFocus = () => {
-    this.setState({
-      loadoutFocus: true,
-      weaponListFocus: false,
-    });
+  const changeLoadoutFocus = () => {
+    setLoadoutFocus(true);
+    setWeaponListFocus(false);
   };
 
-  hideTabBar = () => {
-    this.setState({
-      hiddenTabBar: true,
-    });
+  const hideTabBar = () => {
+    setHiddenTabBar(true);
   };
-  render() {
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#858585" }}>
-        <View style={{ flex: 1 }}>{this.state.shownScreen}</View>
-        <View
-          style={
-            !this.state.hiddenTabBar
-              ? styles.tabBar
-              : { ...styles.tabBar, display: "none" }
-          }
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#858585' }}>
+      <View style={{ flex: 1 }}>{shownScreen}</View>
+      <View
+        style={
+          !hiddenTabBar
+            ? styles.tabBar
+            : { ...styles.tabBar, display: 'none' }
+        }
+      >
+        <Pressable
+          onPress={() => {
+            changeWeaponListFocus();
+            changeScreen(
+              <NavigationContainer>{weaponStack}</NavigationContainer>
+            );
+          }}
+          style={styles.tabItem}
         >
-          <Pressable
-            onPress={() => {
-              this.changeWeaponListFocus();
-              this.changeScreen(
-                <NavigationContainer>{weaponStack}</NavigationContainer>
-              );
+          <Image
+            source={require('./assets/weaponAnalyzer.png')}
+            style={{
+              resizeMode: 'contain',
+              tintColor: weaponListFocus ? '#D9D9D9' : '#393939',
+              height: 50,
             }}
-            style={styles.tabItem}
-          >
-            <Image
-              source={require("./assets/weaponAnalyzer.png")}
-              style={{
-                resizeMode: "contain",
-                tintColor: this.state.weaponListFocus ? "#D9D9D9" : "#393939",
-                height: 50,
-              }}
-            />
-          </Pressable>
-          <Pressable
-            style={styles.tabItem}
-            onPress={() => {
-              //this.hideTabBar();
-              this.changeLoadoutFocus();
-              this.changeScreen(
-                <NavigationContainer>{loadoutStack}</NavigationContainer>
-              );
+          />
+        </Pressable>
+        <Pressable
+          style={styles.tabItem}
+          onPress={() => {
+            //hideTabBar();
+            changeLoadoutFocus();
+            changeScreen(
+              <NavigationContainer>{loadoutStack}</NavigationContainer>
+            );
+          }}
+        >
+          <Image
+            source={require('./assets/loadoutBuilder.png')}
+            resizeMode="contain"
+            style={{
+              height: 50,
+              resizeMode: 'contain',
+              tintColor: loadoutFocus ? '#D9D9D9' : '#393939',
             }}
-          >
-            <Image
-              source={require("./assets/loadoutBuilder.png")}
-              resizeMode="contain"
-              style={{
-                height: 50,
-
-                resizeMode: "contain",
-                tintColor: this.state.loadoutFocus ? "#D9D9D9" : "#393939",
-              }}
-            />
-          </Pressable>
-        </View>
-      </SafeAreaView>
-    );
-  }
-}
+          />
+        </Pressable>
+      </View>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   tabBar: {
-    flexDirection: "row",
+    flexDirection: 'row',
     height: 60,
-    backgroundColor: "#868686",
+    backgroundColor: '#868686',
   },
   tabItem: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
+
+
