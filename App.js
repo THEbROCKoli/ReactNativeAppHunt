@@ -16,6 +16,8 @@ import WeaponList from "./src/screens/WeaponsList";
 import WeaponDetails from "./src/screens/WeaponDetails";
 import LoadoutList from "./src/screens/LoadoutList";
 import { SafeAreaView } from "react-native-safe-area-context";
+import CommunityLoadoutList from "./src/screens/CommunityLoadoutList";
+import CommunityLoadout from "./src/screens/CommunityLoadout";
 //import WeaponDetails from './src/screens/WeaponDetails';
 
 const Stack = createNativeStackNavigator();
@@ -265,6 +267,28 @@ const loadoutStack = (
   </Stack.Navigator>
 );
 
+const communityStack = (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="CommunityLoadoutList"
+      component={CommunityLoadoutList}
+      options={{
+        headerShown: false,
+      }}
+    ></Stack.Screen>
+    <Stack.Screen
+      name="CommunityLoadout"
+      component={CommunityLoadout}
+      options={{
+        headerTintColor: "#FFF",
+        headerStyle: {
+          backgroundColor: "#242424",
+        },
+      }}
+    ></Stack.Screen>
+  </Stack.Navigator>
+);
+
 
 export default App = () => {
   const [shownScreen, setShownScreen] = useState(
@@ -273,6 +297,7 @@ export default App = () => {
   const [weaponListFocus, setWeaponListFocus] = useState(true);
   const [loadoutFocus, setLoadoutFocus] = useState(false);
   const [hiddenTabBar, setHiddenTabBar] = useState(false);
+  const [communityFocus, setCommunityFocus] = useState(false)
 
   const changeScreen = (screen) => {
     setShownScreen(screen);
@@ -281,12 +306,22 @@ export default App = () => {
   const changeWeaponListFocus = () => {
     setWeaponListFocus(true);
     setLoadoutFocus(false);
+    setCommunityFocus(false);
   };
 
   const changeLoadoutFocus = () => {
     setLoadoutFocus(true);
     setWeaponListFocus(false);
+    setCommunityFocus(false);
   };
+
+  const changeCommunityFocus = () => {
+    setLoadoutFocus(false);
+    setWeaponListFocus(false);
+    setCommunityFocus(true);
+  }
+
+  
 
   const hideTabBar = () => {
     setHiddenTabBar(true);
@@ -337,6 +372,27 @@ export default App = () => {
               height: 50,
               resizeMode: 'contain',
               tintColor: loadoutFocus ? '#D9D9D9' : '#393939',
+            }}
+          />
+        </Pressable>
+
+        <Pressable
+          style={styles.tabItem}
+          onPress={() => {
+            //hideTabBar();
+            changeCommunityFocus();
+            changeScreen(
+              <NavigationContainer>{communityStack}</NavigationContainer>
+            )
+          }}
+        >
+          <Image
+            source={require('./assets/loadoutList.png')}
+            resizeMode="contain"
+            style={{
+              height: 50,
+              resizeMode: 'contain',
+              tintColor: communityFocus ? '#D9D9D9' : '#393939',
             }}
           />
         </Pressable>

@@ -23,3 +23,4 @@ export const getDamageModifiers = async () => {
   }
   return damageModifiersFromApi
 }
+

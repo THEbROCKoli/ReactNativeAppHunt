@@ -10,12 +10,14 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   TextInput,
+  Modal,
   TouchableWithoutFeedback,
 } from "react-native";
 import LoadoutWeaponContainer from "../components/LoadoutWeaponContainer";
 import jsonData from "../../data/HuntJsonLight.json";
 import Base from "../../data/Base";
 import { getWeaponList } from "../apiCalls/weaponApis";
+import { shareLoadout } from "../apiCalls/shareApi";
 
 const LoadoutBuilder = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,8 +27,19 @@ const LoadoutBuilder = ({ route, navigation }) => {
   const [firstWeaponId, setFirstWeaponId] = useState(-1);
   const [secondWeaponId, setSecondWeaponId] = useState(-1);
 
-  const { id, name} = route.params;  
-  
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalText, setModalText] = useState("");
+  const showModal = () => {
+    setModalVisible(true);
+    setTimeout(hideModal, 1000);
+  };
+
+  const hideModal = () => {
+    setModalVisible(false);
+  };
+
+  const { id, name } = route.params;
+
   useEffect(() => {
     getWeaponList().then((response) => {
       setList(response);
@@ -103,6 +116,25 @@ const LoadoutBuilder = ({ route, navigation }) => {
   }
   return (
     <SafeAreaView style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={hideModal}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "stretch",
+          }}
+        >
+          <View style={{ alignSelf: "center", opacity:0.5, backgroundColor: "#FFFFFF" , padding:20, borderRadius:20}}>
+            <Text style={{ opacity:1, fontSize: 30 ,textAlign:"center"}}>Il loadout è stato condiviso</Text>
+          </View>
+        </View>
+      </Modal>
       <View style={{ marginHorizontal: 10 }}>
         <Text style={{ color: "#858585", fontSize: 20 }}>Loadout name</Text>
         <View style={{ flexDirection: "row", marginBottom: 5 }}>
@@ -177,17 +209,42 @@ const LoadoutBuilder = ({ route, navigation }) => {
       </View>
       <View style={styles.saveButtonContainer}>
         <TouchableOpacity
+          style={{ ...styles.boxedText, borderRadius: 10, padding: 5 }}
           onPress={() => {
             updateLoadout(loadoutName, firstWeaponId, secondWeaponId, id);
-            //onGoBack();
-            //navigation.options.onGoBack();
-            navigation.navigate( "LoadoutList",{
-              maybeRefresh: true
-            })
+
+            navigation.navigate("LoadoutList", {
+              maybeRefresh: true,
+            });
           }}
         >
-          <Text style={{ ...styles.boxedText, borderRadius: 10 }}>
-            Save changes
+          <Image
+            source={require("../../assets/save.png")}
+            style={styles.actionButtons}
+          />
+          <Text style={{ color: "white", fontSize: 15, textAlign: "center" }}>
+            save changes
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ ...styles.boxedText, borderRadius: 10, padding: 5 }}
+          onPress={() => {
+            shareLoadout(loadoutName, firstWeaponId, secondWeaponId).then(
+              (message) => {
+                setModalText(message);
+                console.log("Message from shareLoadout:", message);
+              }
+            );
+            showModal();
+          }}
+        >
+          <Image
+            source={require("../../assets/share.png")}
+            style={styles.actionButtons}
+          />
+          <Text style={{ color: "white", fontSize: 15, textAlign: "center" }}>
+            share loadout
           </Text>
         </TouchableOpacity>
       </View>
@@ -200,8 +257,10 @@ export default LoadoutBuilder;
 const styles = StyleSheet.create({
   saveButtonContainer: {
     flex: 1,
-    justifyContent: "flex-end",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
     alignItems: "center",
+
     marginBottom: 20,
   },
   weaponName: {
@@ -223,6 +282,12 @@ const styles = StyleSheet.create({
     height: 48,
     width: 48,
     resizeMode: "contain",
+  },
+  actionButtons: {
+    height: 40,
+    width: 40,
+    resizeMode: "contain",
+    alignSelf: "center",
   },
   image: {
     height: 48,
@@ -261,7 +326,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#858585",
     borderRadius: 20,
     fontSize: 20,
-
     padding: 10,
     color: "white",
   },
