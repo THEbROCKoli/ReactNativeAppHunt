@@ -40,12 +40,14 @@ const LoadoutList = ({ route, navigation }) => {
 
   const createNewLoadout = () => {
     Base.newLoadout();
-    navigation.navigate("LoadoutBuilder", {
-      id:thisUserLoadouts[thisUserLoadouts.length-1].id
-    })
     Base.getLoadouts((loadouts) => {
       setList(loadouts);
+      navigation.navigate("LoadoutBuilder", {
+        id:loadouts[loadouts.length-1].id
+      })
     });
+    
+    
   };
 
   const deleteLoadout = (id) => {
